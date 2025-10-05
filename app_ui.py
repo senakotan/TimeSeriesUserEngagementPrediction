@@ -7,9 +7,6 @@ import plotly.graph_objects as go
 import base64
 from pathlib import Path
 
-# =========================
-#  SAYFA & STİL
-# =========================
 st.set_page_config(page_title="Prophet Forecast Dashboard", layout="wide")
 
 def inject_base_css():
@@ -22,12 +19,10 @@ def inject_base_css():
     }
     .metric-card .metric-label{ color:#2b2b2b; font-size:12px; }
     .metric-card .metric-value{ font-weight:700; }
-
     .logo-container{ position:absolute; top:14px; right:24px; z-index:1000; }
     .logo-container img{ width:200px; }
     @media (max-width: 1200px){ .logo-container img{ width:160px; } }
     @media (max-width: 992px){ .logo-container{ top:10px; right:14px; } .logo-container img{ width:130px; } }
-
     .js-plotly-plot .rangeslider-range,
     .js-plotly-plot .rangeslider-mask{ background:rgba(46,139,87,0.08) !important; }
     </style>
@@ -54,7 +49,6 @@ def inject_dark_css():
 
 inject_base_css()
 
-# =============== Logo (base64) ===============
 @st.cache_data
 def get_image_as_base64(file: str):
     try:
@@ -69,10 +63,8 @@ logo_b64 = get_image_as_base64("tabii_logo.png")
 if logo_b64:
     st.markdown(f'<div class="logo-container"><img src="data:image/png;base64,{logo_b64}"></div>', unsafe_allow_html=True)
 
-# ================= Başlık =================
 st.markdown("<h3>Zaman Serisi Kullanıcı Etkileşimleri Tahmin Servisi (Prophet)</h3>", unsafe_allow_html=True)
 
-# ================= Sidebar / Ayarlar =================
 st.sidebar.header("Ayarlar")
 test_gun_sayisi = st.sidebar.slider("Test gün sayısı", 7, 60, 30, 1)
 use_uploads = st.sidebar.checkbox("CSV'leri yükleyerek kullan", value=False)
@@ -90,7 +82,6 @@ if tema == "Koyu":
 else:
     plotly_template = "plotly_white"
 
-# ================= Veri Yükleme =================
 if use_uploads:
     df_file = st.sidebar.file_uploader("daily_engagements_final.csv", type=["csv"])
     holidays_file = st.sidebar.file_uploader("prophet_holidays_tr.csv", type=["csv"])
@@ -107,7 +98,6 @@ else:
         st.error("Lokal veri dosyaları bulunamadı. Lütfen 'CSV'leri yükleyerek kullan' seçeneğini aktif hale getirin.")
         st.stop()
 
-# ================= Veri Hazırlama =================
 df["event_date"] = pd.to_datetime(df["event_date"])
 holidays_df["ds"] = pd.to_datetime(holidays_df["ds"])
 
@@ -124,7 +114,6 @@ if len(df_prophet) <= test_gun_sayisi:
     st.error("Veri satırı test gün sayısından az/eşit. Lütfen test gün sayısını düşürün.")
     st.stop()
 
-# ================= Model Eğitimi ve Tahmin =================
 train_df = df_prophet.iloc[:-test_gun_sayisi].copy()
 test_df  = df_prophet.iloc[-test_gun_sayisi:].copy()
 
@@ -138,7 +127,6 @@ with st.spinner("Model eğitiliyor..."):
 future_df = pd.concat([train_df, test_df], ignore_index=True)[["ds"] + regressors]
 forecast = model.predict(future_df)
 
-# ================= Metrikler =================
 y_true = test_df["y"].values
 y_pred = forecast["yhat"].iloc[-test_gun_sayisi:].values
 mae = mean_absolute_error(y_true, y_pred)
@@ -152,13 +140,9 @@ with c2: st.markdown(f'<div class="metric-card"><div class="metric-label">Ortala
 with c3: st.markdown(f'<div class="metric-card"><div class="metric-label">Yaklaşık Doğruluk</div><div class="metric-value" style="font-size:22px">%{dogruluk_orani:.2f}</div></div>', unsafe_allow_html=True)
 with c4: st.markdown(f'<div class="metric-card"><div class="metric-label">Test Gün Sayısı</div><div class="metric-value" style="font-size:22px">{test_gun_sayisi}</div></div>', unsafe_allow_html=True)
 
-# ================= Grafik =================
-#st.markdown("##### Gerçek vs. Tahmin ")
-
 full_actual_data = pd.concat([train_df, test_df], ignore_index=True)
 split_date_dt = pd.to_datetime(test_df["ds"].iloc[0])
 
-# Sadece görselleştirme için yumuşatma uygula
 plot_actual_y = full_actual_data["y"].rolling(ma_window, min_periods=1).mean() if ma_window > 1 else full_actual_data["y"]
 plot_pred_y   = forecast["yhat"].rolling(ma_window, min_periods=1).mean() if ma_window > 1 else forecast["yhat"]
 
@@ -201,20 +185,16 @@ fig.update_xaxes(
 )
 st.plotly_chart(fig, use_container_width=True)
 
-# ================= Tablo Önizlemeleri =================
 with st.expander("Veri önizlemeleri"):
     st.markdown("<p style='font-size:16px; font-weight:bold;'> Eğitim Verileri (Train)</p>", unsafe_allow_html=True)
     st.dataframe(train_df.head(), use_container_width=True)
-
     st.markdown("<p style='font-size:16px; font-weight:bold;'> Test Verileri (Test)</p>", unsafe_allow_html=True)
     st.dataframe(test_df.head(), use_container_width=True)
-
     st.markdown("<p style='font-size:16px; font-weight:bold;'> Tahmin Sonuçları (Forecast)</p>", unsafe_allow_html=True)
     st.dataframe(
         forecast.tail(test_gun_sayisi)[["ds","yhat","yhat_lower","yhat_upper"]],
         use_container_width=True
     )
-
 
 with st.expander("Tatil günleri önizleme"):
     cols_to_show = [c for c in ["ds", "holiday"] if c in holidays_df.columns]
