@@ -92,8 +92,6 @@ The project includes a **Streamlit-based user interface** that allows:
 - Comparison of actual vs predicted engagement metrics  
 - Downloadable charts and metrics (`.csv`, `.png`)
 
-### UI Preview
-![Streamlit Dashboard](assets/ui_preview.png)
 
 ---
 
