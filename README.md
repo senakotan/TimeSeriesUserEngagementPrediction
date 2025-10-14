@@ -8,7 +8,7 @@ The aim of this study is to **analyze user engagement patterns** and **predict d
 ## 🧠 Overview
 
 This project focuses on understanding user behavior dynamics over time and predicting future engagement metrics to support data-driven decision-making at TRT.  
-We used **Meta Prophet (Facebook Prophet)** to model trends, seasonality, and the impact of holidays on user activity.
+We used **Meta Prophet** to model trends, seasonality, and the impact of holidays on user activity.
 
 The forecasting pipeline covers:
 - Data extraction from **BigQuery**
