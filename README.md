@@ -1,4 +1,4 @@
-# 📊 Tabii Time-Series User Engagement Prediction
+# 📊 Time-Series User Engagement Prediction
 
 **A data-driven forecasting project** developed during my internship at **TRT (Turkish Radio and Television Corporation)**.  
 The aim of this study is to **analyze user engagement patterns** and **predict daily average watch durations** on the **Tabii** digital streaming platform using **time-series analysis** and **machine learning models**.
