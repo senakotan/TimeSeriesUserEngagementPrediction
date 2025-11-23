@@ -84,7 +84,7 @@ The project includes an interactive dashboard that allows:
 - Export options (`.csv`, `.png`)
 
 ### Dashboard Interface  
-<img width="1918" alt="streamlit_dashboard" src="https://github.com/user-attachments/assets/YOUR-DASHBOARD-IMAGE-ID" />
+<img width="1918" height="931" alt="prophet_forecast" src="https://github.com/user-attachments/assets/c33fa635-6d75-4a3b-bdf3-0db0fcbc4808" />
 
 ---
 
