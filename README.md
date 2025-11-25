@@ -84,7 +84,8 @@ The project includes an interactive dashboard that allows:
 - Export options (`.csv`, `.png`)
 
 ### Dashboard Interface  
-<img width="1918" height="931" alt="prophet_forecast" src="https://github.com/user-attachments/assets/c33fa635-6d75-4a3b-bdf3-0db0fcbc4808" />
+
+<img width="1987" height="900" alt="tabii_proje" src="https://github.com/user-attachments/assets/027f103e-1f78-4b56-9694-2cc11440584a" />
 
 ---
 
