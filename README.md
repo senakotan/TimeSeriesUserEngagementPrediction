@@ -84,8 +84,7 @@ The project includes an interactive dashboard that allows:
 - Export options (`.csv`, `.png`)
 
 ### Dashboard Interface  
-
-<img width="1987" height="900" alt="tabii_proje" src="https://github.com/user-attachments/assets/027f103e-1f78-4b56-9694-2cc11440584a" />
+<img width="1912" height="821" alt="tabii_proje" src="https://github.com/user-attachments/assets/4b8a003b-4dc7-46e0-b31c-689dc363df38" />
 
 ---
 
