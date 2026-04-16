@@ -49,7 +49,6 @@ Prophet decomposes the series into **trend + seasonality + holidays**.
 
 ### Key Model Components
 - Train/test split: **80/20**
-- Regressors added with `.add_regressor()`
 - Weekly & monthly seasonality
 - Turkish official holidays included
 
