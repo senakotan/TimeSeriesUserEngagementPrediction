@@ -9,18 +9,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(ROOT)
 from model_experiments.prophet.prophet_prediction import run_prophet_model
 
-# Genel sayfa ayarları
 st.set_page_config(
     page_title="Zaman Serisi Kullanıcı Etkileşimleri Tahmin Servisi",
     layout="wide"
 )
 
-# CSS stilleri
+
 def inject_base_css():
-    """
-    Uygulamanın genel tipografi, padding, sidebar ve metric kart stillerini
-    tanımlayan temel (light) tema CSS'i.
-    """
     st.markdown("""
     <style>
     /* Genel layout */
@@ -114,7 +109,7 @@ def inject_base_css():
     </style>
     """, unsafe_allow_html=True)
 
-# Koyu tema
+
 def inject_dark_css():
     """
     Koyu (dark) tema seçildiğinde uygulanan arka plan, kart ve tablo stilleri.
@@ -182,13 +177,8 @@ def inject_dark_css():
 inject_base_css()
 
 
-# Logonun ekrana basılması
 @st.cache_data
 def get_image_as_base64(file: str):
-    """
-    Verilen dosya yolundaki resmi base64 formatına çevirir.
-    Resim bulunamazsa None döner.
-    """
     try:
         path = Path(file)
         with open(path, "rb") as f:
@@ -198,7 +188,6 @@ def get_image_as_base64(file: str):
         return None
 
 
-# Logo dosyasını base64 olarak oku ve sayfanın sağ üstüne yerleştirelim
 logo_b64 = get_image_as_base64("figures/tabii_logo.png")
 if logo_b64:
     st.markdown(
@@ -207,7 +196,6 @@ if logo_b64:
     )
 
 
-# Üst başlık
 st.markdown("""
 <div class="app-header">
   <div class="app-title">
@@ -219,27 +207,21 @@ st.markdown("""
 
 
 
-# Sidebar ayarları
 st.sidebar.header("Ayarlar")
 
-# Test dönemi uzunluğu – kullanıcı slider ile seçebiliyor
 test_gun_sayisi = st.sidebar.slider("Test gün sayısı", 7, 60, 30, 1)
 
-# Kullanıcı isterse CSV dosyalarını kendi yükleyebiliyor
 use_uploads = st.sidebar.checkbox("CSV'leri yükleyerek kullan", value=False)
 
 st.sidebar.subheader("Görselleştirme")
 
-# Güven bandı göster/gizle secenegi
 show_ci = st.sidebar.checkbox("Güven bandını göster", value=True)
 
-# Lejant göster/gizle secenegi
 show_legend = st.sidebar.checkbox("Lejandı göster", value=True)
 
-# Hareketli ortalama (MA) ile yumuşatma penceresi
 ma_window = st.sidebar.slider("Yumuşatma (MA pencere, gün)", 1, 14, 1, 1)
 
-# Tema seçimi (açık / koyu)
+
 st.sidebar.subheader("Görünüm")
 tema = st.sidebar.selectbox("Tema", ["Ferah", "Koyu"], index=0)
 if tema == "Koyu":
@@ -249,22 +231,17 @@ else:
     plotly_template = "plotly_white"
 
 
-# Veri yükleme
-
 if use_uploads:
-    # Kullanıcıdan veri ve tatil günleri dosyalarını alıyoruz
     df_file = st.sidebar.file_uploader("daily_engagements_final.csv", type=["csv"])
     holidays_file = st.sidebar.file_uploader("prophet_holidays_tr.csv", type=["csv"])
 
-    # Dosyalar gelmediyse uygulamayı durdurup ve bilgilendiriyoruz
-    if df_file is None or holidays_file is None:
+  
         st.info("Lütfen her iki CSV’yi de yükleyin veya yükleme seçeneğini kapatın.")
         st.stop()
 
     df = pd.read_csv(df_file)
     holidays_df = pd.read_csv(holidays_file)
 else:
-    # Lokal klasörden hazır CSV dosyalarını okumaya çalışıyor
     try:
         df = pd.read_csv("data/daily_engagements_final.csv")
         holidays_df = pd.read_csv("data/prophet_holidays_tr.csv")
@@ -272,11 +249,9 @@ else:
         st.error("Lokal veri dosyaları bulunamadı. Lütfen 'CSV'leri yükleyerek kullan' seçeneğini aktif hale getirin.")
         st.stop()
 
-# Tarih kolonlarını datetime tipine dönüştürüyoruz
 df["event_date"] = pd.to_datetime(df["event_date"])
 holidays_df["ds"] = pd.to_datetime(holidays_df["ds"])
 
-# Prophet modeli kurulur (method import edilir)
 try:
     forecast, metrics, train_df, test_df, df_prophet = run_prophet_model(
         df=df,
@@ -291,10 +266,10 @@ mae = metrics["mae"]
 ortalama_yuzde_hata = metrics["mape"]
 dogruluk_orani = metrics["accuracy"]
 
-# Metrik kartları
+
 
 c1, c2, c3, c4 = st.columns(4)
-# MAE kartı
+
 with c1:
     st.markdown(
         f'<div class="metric-card">'
@@ -304,7 +279,7 @@ with c1:
         unsafe_allow_html=True
     )
 
-# Ortalama yüzdesel hata kartı
+
 with c2:
     st.markdown(
         f'<div class="metric-card">'
@@ -314,7 +289,7 @@ with c2:
         unsafe_allow_html=True
     )
 
-# Yaklaşık doğruluk kartı
+
 with c3:
     st.markdown(
         f'<div class="metric-card">'
@@ -324,7 +299,6 @@ with c3:
         unsafe_allow_html=True
     )
 
-# Seçilen test gün sayısı kartı
 with c4:
     st.markdown(
         f'<div class="metric-card">'
@@ -334,14 +308,11 @@ with c4:
         unsafe_allow_html=True
     )
 
-# Plotly ile zaman serisi grafiği çizdirme kısmı (gerçek+tahmin)
-# Grafik için full (train+test) gerçek seri
+
 full_actual_data = pd.concat([train_df, test_df], ignore_index=True)
 
-# Eğitim/test ayrımının olduğu tarih
 split_date_dt = pd.to_datetime(test_df["ds"].iloc[0])
 
-# MA penceresi > 1 ise hareketli ortalama ile yumuşatma uygulanıyor
 if ma_window > 1:
     plot_actual_y = full_actual_data["y"].rolling(ma_window, min_periods=1).mean()
     plot_pred_y = forecast["yhat"].rolling(ma_window, min_periods=1).mean()
@@ -354,9 +325,8 @@ fig = go.Figure()
 tabii_green = "#00925F"
 ci_color = "rgba(0,146,95,0.18)"
 
-# Güven bandı (Prophet'in yhat_lower / yhat_upper'ı)
+
 if show_ci and "yhat_lower" in forecast.columns and "yhat_upper" in forecast.columns:
-    # Üst sınır
     fig.add_trace(go.Scatter(
         x=forecast["ds"],
         y=forecast["yhat_upper"],
@@ -365,7 +335,7 @@ if show_ci and "yhat_lower" in forecast.columns and "yhat_upper" in forecast.col
         showlegend=False,
         hoverinfo="skip"
     ))
-    # Alt sınır + alan doldurma
+
     fig.add_trace(go.Scatter(
         x=forecast["ds"],
         y=forecast["yhat_lower"],
@@ -378,7 +348,7 @@ if show_ci and "yhat_lower" in forecast.columns and "yhat_upper" in forecast.col
         customdata=forecast["yhat_upper"]
     ))
 
-# Tahmin serisi
+
 fig.add_trace(go.Scatter(
     x=forecast["ds"],
     y=plot_pred_y,
@@ -387,7 +357,7 @@ fig.add_trace(go.Scatter(
     hovertemplate="Tarih: %{x|%d %b %Y}<br>Tahmin: %{y:.2f} dk"
 ))
 
-# Gerçek seri
+
 fig.add_trace(go.Scatter(
     x=full_actual_data["ds"],
     y=plot_actual_y,
@@ -396,7 +366,6 @@ fig.add_trace(go.Scatter(
     hovertemplate="Tarih: %{x|%d %b %Y}<br>Gerçek: %{y:.2f} dk"
 ))
 
-# Eğitim/test ayrım çizgisi
 fig.add_shape(
     type="line",
     x0=split_date_dt, x1=split_date_dt, y0=0, y1=1,
@@ -404,7 +373,6 @@ fig.add_shape(
     line=dict(color="#065f46", width=2, dash="dot")
 )
 
-# Ayrım annotation
 fig.add_annotation(
     x=split_date_dt, y=1,
     xref="x", yref="paper",
@@ -413,7 +381,6 @@ fig.add_annotation(
     font=dict(color="#065f46")
 )
 
-# Genel grafik ayarları
 fig.update_layout(
     height=460,
     template=plotly_template,
@@ -440,7 +407,7 @@ fig.update_xaxes(
 
 st.plotly_chart(fig, use_container_width=True)
 
-# Veri ve tahmin önizlemeleri
+
 with st.expander("Veri önizlemeleri"):
     st.markdown("<p style='font-size:16px; font-weight:bold;'>Eğitim Verileri (Train)</p>", unsafe_allow_html=True)
     st.dataframe(train_df.head(), use_container_width=True)
@@ -454,7 +421,7 @@ with st.expander("Veri önizlemeleri"):
         use_container_width=True
     )
 
-# Tatil özel gün önizlemeleri
+
 with st.expander("Tatil günleri önizleme"):
     cols_to_show = [c for c in ["ds", "holiday"] if c in holidays_df.columns]
     st.dataframe(holidays_df[cols_to_show].sort_values("ds").head(10), use_container_width=True)
