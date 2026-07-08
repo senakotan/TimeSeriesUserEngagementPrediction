@@ -106,7 +106,6 @@ dogruluk_orani = 100 - ortalama_yuzde_hata
 print("- TAHMİN SONUÇLARI -")
 print(f'-Ortalama Mutlak Hata (MAE): {mae:.2f} dakika')
 print(f'-Ortalama Yüzdesel Hata: %{ortalama_yuzde_hata:.2f}')
-print('-----------------------------------------')
 print(f'-YAKLAŞIK DOĞRULIK ORANI: %{dogruluk_orani:.2f} ')
 
 full_actual_data = pd.concat([train_df, test_df])
