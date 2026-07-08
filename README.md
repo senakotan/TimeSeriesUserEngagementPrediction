@@ -1,11 +1,11 @@
-# 📊 TRT Tabii | Time-Series User Engagement Prediction
+#  TRT Tabii | Time-Series User Engagement Prediction
 
 A forecasting project developed during my internship at **TRT (Turkish Radio and Television Corporation)**.  
 The goal is to analyze user behavior and predict **daily average watch duration** on the **Tabii** digital streaming platform using **time-series analysis**.
 
 ---
 
-## 🧠 Project Summary
+##  Project Summary
 
 This study focuses on modeling engagement trends and capturing seasonal patterns.  
 We used **Meta Prophet** as the main forecasting model, supported by custom regressors and extensive feature engineering.
@@ -18,7 +18,7 @@ The pipeline includes:
 
 ---
 
-## 📂 Data & Preprocessing
+##  Data & Preprocessing
 
 - Raw dataset: **495M+ rows**
 - Aggregated to **381 daily records** using BigQuery
@@ -29,7 +29,7 @@ The pipeline includes:
 
 ---
 
-## ⚙️ Feature Engineering
+## Feature Engineering
 
 Over **50 predictive features** were created:
 
@@ -43,7 +43,7 @@ XGBoost importance highlighted **short-term lags** and **7-day rolling averages*
 
 ---
 
-## 🔮 Forecasting Model (Meta Prophet)
+## Forecasting Model (Meta Prophet)
 
 Prophet decomposes the series into **trend + seasonality + holidays**.
 
@@ -54,7 +54,7 @@ Prophet decomposes the series into **trend + seasonality + holidays**.
 
 ---
 
-## 📏 Evaluation
+## Evaluation
 
 | Metric | Purpose |
 |-------|---------|
@@ -66,7 +66,7 @@ Prophet decomposes the series into **trend + seasonality + holidays**.
 
 ---
 
-## 📈 Results
+## Results
 
 - Weekly engagement patterns modeled accurately  
 - Stable short-term forecasts  
@@ -74,7 +74,7 @@ Prophet decomposes the series into **trend + seasonality + holidays**.
 
 ---
 
-## 🖥️ Streamlit Dashboard
+## Streamlit Dashboard
 
 The project includes an interactive dashboard that allows:
 - Actual vs predicted visualization  
