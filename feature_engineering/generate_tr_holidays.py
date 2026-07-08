@@ -1,4 +1,3 @@
-# generate_tr_holidays.py
 import os
 import sys
 import pandas as pd
