@@ -3,7 +3,7 @@ from .bigquery_connection import client
 
 
 PROJECT_ID = "tabii-469409"
-DATASET_ID = "anormaly_detection"
+DATASET_ID = ""
 TABLE_FQN = f"{PROJECT_ID}.{DATASET_ID}.tabii_engagement_data"
 LOCATION = "US"
 
