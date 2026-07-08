@@ -87,7 +87,7 @@ The project includes an interactive dashboard that allows:
 
 ---
 
-## 👩‍💻 Author
+## Author
 
 **Sena Kotan**  
 _Data Science & Machine Learning Intern at TRT_  
