@@ -91,4 +91,3 @@ The project includes an interactive dashboard that allows:
 
 **Sena Kotan**  
 _Data Science & Machine Learning Intern at TRT_  
-📍 FSMVU — Electrical Electronics & Computer Engineering  
